@@ -334,6 +334,7 @@ class RegularGridInterpolator:
         xi, xi_shape, ndim, nans, out_of_bounds = self._prepare_xi(xi)
 
         if method == "linear":
+            print("will find indices", xi.T.shape)
             indices, norm_distances = self._find_indices(xi.T)
             if (ndim == 2 and hasattr(self.values, 'dtype') and
                     self.values.ndim == 2 and self.values.flags.writeable and
