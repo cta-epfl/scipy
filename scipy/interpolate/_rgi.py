@@ -328,13 +328,10 @@ class RegularGridInterpolator:
         method = self.method if method is None else method
         if method not in self._ALL_METHODS:
             raise ValueError("Method '%s' is not defined" % method)
-
-        print("starting to interpolate with method", method, "of", self)
-
+        
         xi, xi_shape, ndim, nans, out_of_bounds = self._prepare_xi(xi)
 
         if method == "linear":
-            print("will find indices", xi.T.shape)
             indices, norm_distances = self._find_indices(xi.T)
             if (ndim == 2 and hasattr(self.values, 'dtype') and
                     self.values.ndim == 2 and self.values.flags.writeable and
@@ -345,13 +342,6 @@ class RegularGridInterpolator:
                 # a fast path
                 out = np.empty(indices.shape[1], dtype=self.values.dtype)
 
-                print("starting to interpolate evaluate_linear_2d", 
-                      "self.values.shape:", self.values.shape,
-                        "indices.shape:", indices.shape,
-                        "norm_distances.shape:", norm_distances.shape,
-                        "self.grid:", self.grid,
-                        "out.shape:", out.shape,
-                      )
                 result = evaluate_linear_2d(self.values,
                                             indices,
                                             norm_distances,
@@ -373,9 +363,7 @@ class RegularGridInterpolator:
         # f(nan) = nan, if any
         if np.any(nans):
             result[nans] = np.nan
-
-        print("interpolation took", time.time() - t0, "seconds", self)
-
+        
         return result.reshape(xi_shape[:-1] + self.values.shape[ndim:])
 
     def _prepare_xi(self, xi):
