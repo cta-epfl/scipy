@@ -407,13 +407,17 @@ class RegularGridInterpolator:
 
     def _evaluate_linear(self, indices, norm_distances):
         t0 = time.time()
-        print("\033[31mtarting to _evaluate_linear\033[0m")
+        print("\033[31mstarting to _evaluate_linear\033[0m")
         # slice for broadcasting over trailing dimensions in self.values
         vslice = (slice(None),) + (None,)*(self.values.ndim - len(indices))
+
+        print("\033[31m_evaluate_linear: after slice", time.time() - t0, "\033[0m")
 
         # Compute shifting up front before zipping everything together
         shift_norm_distances = [1 - yi for yi in norm_distances]
         shift_indices = [i + 1 for i in indices]
+
+        print("\033[31m_evaluate_linear: after shift_indices", time.time() - t0, "\033[0m")
 
         # The formula for linear interpolation in 2d takes the form:
         # values = self.values[(i0, i1)] * (1 - y0) * (1 - y1) + \
@@ -424,10 +428,15 @@ class RegularGridInterpolator:
         zipped1 = zip(indices, shift_norm_distances)
         zipped2 = zip(shift_indices, norm_distances)
 
+        print("\033[31m_evaluate_linear: after zipped2=", time.time() - t0, "\033[0m")
+
         # Take all products of zipped1 and zipped2 and iterate over them
         # to get the terms in the above formula. This corresponds to iterating
         # over the vertices of a hypercube.
         hypercube = itertools.product(*zip(zipped1, zipped2))
+
+        print("\033[31m_evaluate_linear: after hypercube=", time.time() - t0, "\033[0m")
+
         value = np.array([0.])
         for h in hypercube:
             edge_indices, weights = zip(*h)
@@ -436,7 +445,7 @@ class RegularGridInterpolator:
                 weight = weight * w
             term = np.asarray(self.values[edge_indices]) * weight[vslice]
             value = value + term   # cannot use += because broadcasting
-        print("_evaluate_linear took", time.time() - t0, "seconds")
+        print("\033[31m_evaluate_linear took", time.time() - t0, "seconds", "\033[0m")
         return value
 
     def _evaluate_nearest(self, indices, norm_distances):
