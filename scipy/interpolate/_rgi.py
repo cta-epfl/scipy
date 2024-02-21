@@ -343,6 +343,14 @@ class RegularGridInterpolator:
                 # cannot support non-writeable values
                 # a fast path
                 out = np.empty(indices.shape[1], dtype=self.values.dtype)
+
+                print("starting to interpolate evaluate_linear_2d", 
+                      "self.values.shape:", self.values.shape,
+                        "indices.shape:", indices.shape,
+                        "norm_distances.shape:", norm_distances.shape,
+                        "self.grid.shape:", self.grid.shape,
+                        "out.shape:", out.shape,
+                      )
                 result = evaluate_linear_2d(self.values,
                                             indices,
                                             norm_distances,
