@@ -323,12 +323,13 @@ class RegularGridInterpolator:
         array([ 4.7, 24.3])
         """
         t0 = time.time()
-        print("starting to interpolate with method", method, "of", self)
 
         is_method_changed = self.method != method
         method = self.method if method is None else method
         if method not in self._ALL_METHODS:
             raise ValueError("Method '%s' is not defined" % method)
+
+        print("starting to interpolate with method", method, "of", self)
 
         xi, xi_shape, ndim, nans, out_of_bounds = self._prepare_xi(xi)
 
