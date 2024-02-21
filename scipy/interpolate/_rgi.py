@@ -407,7 +407,7 @@ class RegularGridInterpolator:
 
     def _evaluate_linear(self, indices, norm_distances):
         t0 = time.time()
-        print("\033[31mstarting to _evaluate_linear\033[0m")
+        print("\033[31mstarting to _evaluate_linear", len(indices), len(norm_distances), "\033[0m")
         # slice for broadcasting over trailing dimensions in self.values
         vslice = (slice(None),) + (None,)*(self.values.ndim - len(indices))
 
