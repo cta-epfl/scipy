@@ -406,6 +406,8 @@ class RegularGridInterpolator:
         return xi, xi_shape, ndim, nans, out_of_bounds
 
     def _evaluate_linear(self, indices, norm_distances):
+        t0 = time.time()
+        print("\033[31mtarting to _evaluate_linear\033[0m")
         # slice for broadcasting over trailing dimensions in self.values
         vslice = (slice(None),) + (None,)*(self.values.ndim - len(indices))
 
@@ -434,6 +436,7 @@ class RegularGridInterpolator:
                 weight = weight * w
             term = np.asarray(self.values[edge_indices]) * weight[vslice]
             value = value + term   # cannot use += because broadcasting
+        print("_evaluate_linear took", time.time() - t0, "seconds")
         return value
 
     def _evaluate_nearest(self, indices, norm_distances):
