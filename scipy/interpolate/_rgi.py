@@ -348,7 +348,7 @@ class RegularGridInterpolator:
                       "self.values.shape:", self.values.shape,
                         "indices.shape:", indices.shape,
                         "norm_distances.shape:", norm_distances.shape,
-                        "self.grid.shape:", self.grid.shape,
+                        "self.grid:", self.grid,
                         "out.shape:", out.shape,
                       )
                 result = evaluate_linear_2d(self.values,
