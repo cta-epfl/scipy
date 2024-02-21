@@ -426,13 +426,26 @@ class RegularGridInterpolator:
         print("\033[31m_evaluate_linear: after hypercube=", time.time() - t0, "\033[0m")
 
         value = np.array([0.])
+        tzip = 0
+        tweights = 0
+        tasarray = 0
         for h in hypercube:
-            edge_indices, weights = zip(*h)
+            t1 = time.time()
+            edge_indices, weights = zip(*h)            
+            tzip += time.time() - t1
+
+            t1 = time.time()
             weight = np.array([1.])
             for w in weights:
                 weight = weight * w
+            tweights += time.time() - t1
+
+            t1 = time.time()
             term = np.asarray(self.values[edge_indices]) * weight[vslice]
+            tasarray += time.time() - t1
+            
             value = value + term   # cannot use += because broadcasting
+        print("\033[31m_evaluate_linear: after loop", time.time() - t0, "tzip=", tzip, "tweights=", tweights, "tasarray=", tasarray, "in hypercube", len(hypercube), "\033[0m")
         print("\033[31m_evaluate_linear took", time.time() - t0, "seconds", "\033[0m")
         return value
 
