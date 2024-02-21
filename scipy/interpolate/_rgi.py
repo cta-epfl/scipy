@@ -1,6 +1,7 @@
 __all__ = ['RegularGridInterpolator', 'interpn']
 
 import itertools
+import time
 
 import numpy as np
 
@@ -321,6 +322,9 @@ class RegularGridInterpolator:
         >>> interp([[1.5, 1.3], [0.3, 4.5]], method='linear')
         array([ 4.7, 24.3])
         """
+        t0 = time.time()
+        print("starting to interpolate with method", method, "of", self)
+
         is_method_changed = self.method != method
         method = self.method if method is None else method
         if method not in self._ALL_METHODS:
@@ -359,6 +363,9 @@ class RegularGridInterpolator:
         # f(nan) = nan, if any
         if np.any(nans):
             result[nans] = np.nan
+
+        print("interpolation took", time.time() - t0, "seconds", self)
+
         return result.reshape(xi_shape[:-1] + self.values.shape[ndim:])
 
     def _prepare_xi(self, xi):
